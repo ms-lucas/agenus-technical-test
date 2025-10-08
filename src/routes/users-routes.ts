@@ -1,10 +1,12 @@
 import type { FastifyInstance } from "fastify";
 import { CreateUserController } from "../controllers/create-user-controller";
+import { GetUserDetailsController } from "../controllers/get-user-details-controller";
 import {
 	createUser201ResponseSchema,
 	createUser409ResponseSchema,
 	createUserBodySchema,
 } from "../controllers/schemas/create-user-schema";
+import { getUserDetailsParamsSchema } from "../controllers/schemas/get-user-details-schema";
 import {
 	searchUsers200ResponseSchema,
 	searchUsersQuerySchema,
@@ -12,6 +14,7 @@ import {
 import { SearchUsersController } from "../controllers/search-users-controller";
 
 const searchUsersController = new SearchUsersController();
+const getUserDetailsController = new GetUserDetailsController();
 const createUserController = new CreateUserController();
 
 export async function usersRoutes(app: FastifyInstance) {
@@ -26,6 +29,16 @@ export async function usersRoutes(app: FastifyInstance) {
 			},
 		},
 		searchUsersController.handle,
+	);
+
+	app.get(
+		"/:userId",
+		{
+			schema: {
+				params: getUserDetailsParamsSchema,
+			},
+		},
+		getUserDetailsController.handle,
 	);
 
 	app.post(
