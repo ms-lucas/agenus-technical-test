@@ -1,21 +1,34 @@
 import type { FastifyInstance } from "fastify";
 import { CreateUserController } from "../controllers/create-user-controller";
+import { DeleteUserController } from "../controllers/delete-user-controller";
 import { GetUserDetailsController } from "../controllers/get-user-details-controller";
 import {
 	createUser201ResponseSchema,
 	createUser409ResponseSchema,
 	createUserBodySchema,
 } from "../controllers/schemas/create-user-schema";
+import {
+	deleteUser204ResponseSchema,
+	deleteUserParamsSchema,
+} from "../controllers/schemas/delete-user-schema";
 import { getUserDetailsParamsSchema } from "../controllers/schemas/get-user-details-schema";
 import {
 	searchUsers200ResponseSchema,
 	searchUsersQuerySchema,
 } from "../controllers/schemas/search-users-schema";
+import {
+	updateUser204ResponseSchema,
+	updateUserBodySchema,
+	updateUserParamsSchema,
+} from "../controllers/schemas/update-user-schema";
 import { SearchUsersController } from "../controllers/search-users-controller";
+import { UpdateUserController } from "../controllers/update-user-controller";
 
 const searchUsersController = new SearchUsersController();
 const getUserDetailsController = new GetUserDetailsController();
 const createUserController = new CreateUserController();
+const updateUserController = new UpdateUserController();
+const deleteUserController = new DeleteUserController();
 
 export async function usersRoutes(app: FastifyInstance) {
 	app.get(
@@ -53,5 +66,32 @@ export async function usersRoutes(app: FastifyInstance) {
 			},
 		},
 		createUserController.handle,
+	);
+
+	app.put(
+		"/:userId",
+		{
+			schema: {
+				body: updateUserBodySchema,
+				params: updateUserParamsSchema,
+				response: {
+					204: updateUser204ResponseSchema,
+				},
+			},
+		},
+		updateUserController.handle,
+	);
+
+	app.delete(
+		"/:userId",
+		{
+			schema: {
+				params: deleteUserParamsSchema,
+				response: {
+					204: deleteUser204ResponseSchema,
+				},
+			},
+		},
+		deleteUserController.handle,
 	);
 }
