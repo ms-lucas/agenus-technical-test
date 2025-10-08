@@ -1,8 +1,10 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaUsersRepository } from "../database/prisma/repositories/prisma-users-repository";
 import { SearchUsersUseCase } from "../use-cases/search-users-use-case";
 import type { SeachUsersQuerySchema } from "./schemas/search-users-schema";
 
-const searchUsersUseCase = new SearchUsersUseCase();
+const prismaUsersRepository = new PrismaUsersRepository();
+const searchUsersUseCase = new SearchUsersUseCase(prismaUsersRepository);
 
 export class SearchUsersController {
 	async handle(

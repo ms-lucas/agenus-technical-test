@@ -1,9 +1,11 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaUsersRepository } from "../database/prisma/repositories/prisma-users-repository";
 import { DeleteUserUseCase } from "../use-cases/detele-user-use-case";
 import { ResourceNotFoundError } from "../use-cases/errors/resource-not-found";
 import type { DeleteUserSchema } from "./schemas/delete-user-schema";
 
-const deleteUserUseCase = new DeleteUserUseCase();
+const prismaUsersRepository = new PrismaUsersRepository();
+const deleteUserUseCase = new DeleteUserUseCase(prismaUsersRepository);
 
 export class DeleteUserController {
 	async handle(

@@ -1,7 +1,10 @@
 import { prismaClient } from "../database/prisma";
+import type { UsersRepository } from "../database/repositories/users-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found";
 
 export class DeleteUserUseCase {
+	constructor(private usersRepository: UsersRepository) {}
+
 	async execute(userId: string) {
 		const user = await prismaClient.user.findUnique({
 			where: {
@@ -15,10 +18,6 @@ export class DeleteUserUseCase {
 			);
 		}
 
-		await prismaClient.user.delete({
-			where: {
-				id: userId,
-			},
-		});
+		await this.usersRepository.delete(userId);
 	}
 }

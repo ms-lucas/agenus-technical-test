@@ -1,4 +1,5 @@
 import { prismaClient } from "../database/prisma";
+import type { UsersRepository } from "../database/repositories/users-repository";
 import { ResourceAlreadyExistsError } from "./errors/resource-already-exists-error";
 
 interface CreateUserUseCaseRequest {
@@ -11,6 +12,8 @@ interface CreateUserUseCaseResponse {
 }
 
 export class CreateUserUseCase {
+	constructor(private usersRepository: UsersRepository) {}
+
 	async exeute({
 		name,
 		email,
@@ -27,13 +30,8 @@ export class CreateUserUseCase {
 			);
 		}
 
-		const { id } = await prismaClient.user.create({
-			data: {
-				name,
-				email,
-			},
-		});
+		const { userId } = await this.usersRepository.create({ name, email });
 
-		return { userId: id };
+		return { userId };
 	}
 }

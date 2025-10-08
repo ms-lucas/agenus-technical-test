@@ -1,7 +1,10 @@
 import { prismaClient } from "../database/prisma";
+import type { UsersRepository } from "../database/repositories/users-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found";
 
 export class UpdateUserUseCase {
+	constructor(private usersRepository: UsersRepository) {}
+
 	async execute(
 		userId: string,
 		{ name, email }: { name: string; email: string },
@@ -18,16 +21,9 @@ export class UpdateUserUseCase {
 			);
 		}
 
-		const updatedUser = await prismaClient.user.update({
-			where: {
-				id: userId,
-			},
-			data: {
-				name,
-				email,
-			},
+		await this.usersRepository.update(userId, {
+			name,
+			email,
 		});
-
-		return updatedUser;
 	}
 }

@@ -1,9 +1,11 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaUsersRepository } from "../database/prisma/repositories/prisma-users-repository";
 import { ResourceNotFoundError } from "../use-cases/errors/resource-not-found";
 import { GetUserDetailsUseCase } from "../use-cases/get-user-details-use-case";
 import type { GetUserDetailsSchema } from "./schemas/get-user-details-schema";
 
-const getUserDetailsUseCase = new GetUserDetailsUseCase();
+const prismaUsersRepository = new PrismaUsersRepository();
+const getUserDetailsUseCase = new GetUserDetailsUseCase(prismaUsersRepository);
 
 export class GetUserDetailsController {
 	async handle(

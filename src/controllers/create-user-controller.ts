@@ -1,9 +1,11 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaUsersRepository } from "../database/prisma/repositories/prisma-users-repository";
 import { CreateUserUseCase } from "../use-cases/create-user-use-case";
 import { ResourceAlreadyExistsError } from "../use-cases/errors/resource-already-exists-error";
 import type { CreateUserSchema } from "./schemas/create-user-schema";
 
-const createUserUseCase = new CreateUserUseCase();
+const prismaUsersRepository = new PrismaUsersRepository();
+const createUserUseCase = new CreateUserUseCase(prismaUsersRepository);
 
 export class CreateUserController {
 	async handle(
