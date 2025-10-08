@@ -6,7 +6,7 @@ export const createUserBodySchema = z.object({
 });
 
 export const createUser201ResponseSchema = z.object({
-	userId: z.uuid().meta({}),
+	userId: z.uuid(),
 });
 
 export const createUser409ResponseSchema = z.object({

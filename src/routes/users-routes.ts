@@ -5,10 +5,29 @@ import {
 	createUser409ResponseSchema,
 	createUserBodySchema,
 } from "../controllers/schemas/create-user-schema";
+import {
+	searchUsers200ResponseSchema,
+	searchUsersQuerySchema,
+} from "../controllers/schemas/search-users-schema";
+import { SearchUsersController } from "../controllers/search-users-controller";
 
+const searchUsersController = new SearchUsersController();
 const createUserController = new CreateUserController();
 
 export async function usersRoutes(app: FastifyInstance) {
+	app.get(
+		"",
+		{
+			schema: {
+				querystring: searchUsersQuerySchema,
+				response: {
+					200: searchUsers200ResponseSchema,
+				},
+			},
+		},
+		searchUsersController.handle,
+	);
+
 	app.post(
 		"",
 		{
