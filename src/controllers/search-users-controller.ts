@@ -13,7 +13,11 @@ export class SearchUsersController {
 	) {
 		const { search, page, limit } = request.query;
 
-		const result = await searchUsersUseCase.execute(search, page, limit);
+		const result = await searchUsersUseCase.execute({
+			search,
+			page,
+			limit,
+		});
 
 		return reply.status(200).send(result);
 	}

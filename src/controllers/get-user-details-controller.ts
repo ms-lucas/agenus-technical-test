@@ -15,7 +15,7 @@ export class GetUserDetailsController {
 		try {
 			const { userId } = request.params;
 
-			const result = await getUserDetailsUseCase.execute(userId);
+			const result = await getUserDetailsUseCase.execute({ userId });
 
 			return reply.status(200).send(result);
 		} catch (error) {

@@ -15,7 +15,7 @@ export class DeleteUserController {
 		try {
 			const { userId } = request.params;
 
-			const result = await deleteUserUseCase.execute(userId);
+			const result = await deleteUserUseCase.execute({ userId });
 
 			return reply.status(200).send(result);
 		} catch (error) {

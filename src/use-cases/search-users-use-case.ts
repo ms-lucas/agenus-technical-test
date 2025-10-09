@@ -1,9 +1,30 @@
+import type { User } from "@prisma/client";
 import type { UsersRepository } from "../database/repositories/users-repository";
+
+interface SearchUsersUseCaseRequest {
+	search?: string;
+	page?: number;
+	limit?: number;
+}
+
+interface SearchUsersUseCaseResponse {
+	total: number;
+	totalPages: number;
+	page: number;
+	limit: number;
+	hasNextPage: boolean;
+	hasPreviousPage: boolean;
+	data: Array<User>;
+}
 
 export class SearchUsersUseCase {
 	constructor(private usersRepository: UsersRepository) {}
 
-	async execute(search?: string, page: number = 1, limit: number = 20) {
+	async execute({
+		search,
+		page = 1,
+		limit = 20,
+	}: SearchUsersUseCaseRequest): Promise<SearchUsersUseCaseResponse> {
 		page = Math.max(1, page);
 		limit = Math.min(Math.max(1, limit), 100);
 

@@ -2,13 +2,25 @@ import { prismaClient } from "../database/prisma";
 import type { UsersRepository } from "../database/repositories/users-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found";
 
+type UpdateUserUseCaseRequest = {
+	userId: string;
+	data: {
+		name: string;
+		email: string;
+	};
+};
+
+type UpdateUserUseCaseResponse = {
+	userId: string;
+};
+
 export class UpdateUserUseCase {
 	constructor(private usersRepository: UsersRepository) {}
 
-	async execute(
-		userId: string,
-		{ name, email }: { name: string; email: string },
-	) {
+	async execute({
+		userId,
+		data,
+	}: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
 		const user = await prismaClient.user.findUnique({
 			where: {
 				id: userId,
@@ -21,9 +33,11 @@ export class UpdateUserUseCase {
 			);
 		}
 
-		await this.usersRepository.update(userId, {
-			name,
-			email,
+		const { userId: id } = await this.usersRepository.update(userId, {
+			name: data.name,
+			email: data.email,
 		});
+
+		return { userId: id };
 	}
 }

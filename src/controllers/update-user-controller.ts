@@ -16,14 +16,15 @@ export class UpdateUserController {
 			const { userId } = request.params;
 			const { name, email } = request.body;
 
-			const result = await updateUserUseCase.execute(userId, { name, email });
+			const result = await updateUserUseCase.execute({
+				userId,
+				data: { name, email },
+			});
 
-			return reply.status(204).send(result);
+			return reply.status(200).send({ userId: result.userId });
 		} catch (error) {
 			if (error instanceof ResourceNotFoundError) {
-				return {
-					message: error.message,
-				};
+				return reply.status(404).send({ message: error.message });
 			}
 		}
 	}

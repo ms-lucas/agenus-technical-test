@@ -17,7 +17,8 @@ import {
 	searchUsersQuerySchema,
 } from "../controllers/schemas/search-users-schema";
 import {
-	updateUser204ResponseSchema,
+	updateUser200ResponseSchema,
+	updateUser404ResponseSchema,
 	updateUserBodySchema,
 	updateUserParamsSchema,
 } from "../controllers/schemas/update-user-schema";
@@ -75,7 +76,8 @@ export async function usersRoutes(app: FastifyInstance) {
 				body: updateUserBodySchema,
 				params: updateUserParamsSchema,
 				response: {
-					204: updateUser204ResponseSchema,
+					200: updateUser200ResponseSchema,
+					404: updateUser404ResponseSchema,
 				},
 			},
 		},

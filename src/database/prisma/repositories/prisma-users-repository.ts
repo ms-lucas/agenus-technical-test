@@ -51,8 +51,8 @@ export class PrismaUsersRepository implements UsersRepository {
 	async update(
 		userId: string,
 		data: { name: string; email: string },
-	): Promise<void> {
-		await prismaClient.user.update({
+	): Promise<{ userId: string }> {
+		const { id } = await prismaClient.user.update({
 			data: {
 				name: data.name,
 				email: data.email,
@@ -61,6 +61,8 @@ export class PrismaUsersRepository implements UsersRepository {
 				id: userId,
 			},
 		});
+
+		return { userId: id };
 	}
 
 	async delete(userId: string): Promise<void> {
