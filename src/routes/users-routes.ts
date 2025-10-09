@@ -9,9 +9,14 @@ import {
 } from "../controllers/schemas/create-user-schema";
 import {
 	deleteUser204ResponseSchema,
+	deleteUser404ResponseSchema,
 	deleteUserParamsSchema,
 } from "../controllers/schemas/delete-user-schema";
-import { getUserDetailsParamsSchema } from "../controllers/schemas/get-user-details-schema";
+import {
+	getUserDetails200ResponseSchema,
+	getUserDetails404ResponseSchema,
+	getUserDetailsParamsSchema,
+} from "../controllers/schemas/get-user-details-schema";
 import {
 	searchUsers200ResponseSchema,
 	searchUsersQuerySchema,
@@ -36,6 +41,9 @@ export async function usersRoutes(app: FastifyInstance) {
 		"",
 		{
 			schema: {
+				tags: ["Usuários"],
+				description:
+					"Busca usuários cadastrados no sistema. Permite filtragem por nome ou e-mail, paginação e definição do número de resultados por página.",
 				querystring: searchUsersQuerySchema,
 				response: {
 					200: searchUsers200ResponseSchema,
@@ -49,7 +57,14 @@ export async function usersRoutes(app: FastifyInstance) {
 		"/:userId",
 		{
 			schema: {
+				tags: ["Usuários"],
+				description:
+					"Retorna os detalhes de um usuário específico pelo seu ID.",
 				params: getUserDetailsParamsSchema,
+				response: {
+					200: getUserDetails200ResponseSchema,
+					404: getUserDetails404ResponseSchema,
+				},
 			},
 		},
 		getUserDetailsController.handle,
@@ -59,6 +74,9 @@ export async function usersRoutes(app: FastifyInstance) {
 		"",
 		{
 			schema: {
+				tags: ["Usuários"],
+				description:
+					"Cria um novo usuário no sistema com nome e e-mail fornecidos.",
 				body: createUserBodySchema,
 				response: {
 					201: createUser201ResponseSchema,
@@ -73,6 +91,9 @@ export async function usersRoutes(app: FastifyInstance) {
 		"/:userId",
 		{
 			schema: {
+				tags: ["Usuários"],
+				description:
+					"Atualiza os dados de um usuário existente, como nome e e-mail, pelo seu ID.",
 				body: updateUserBodySchema,
 				params: updateUserParamsSchema,
 				response: {
@@ -88,9 +109,12 @@ export async function usersRoutes(app: FastifyInstance) {
 		"/:userId",
 		{
 			schema: {
+				tags: ["Usuários"],
+				description: "Remove um usuário do sistema pelo seu ID.",
 				params: deleteUserParamsSchema,
 				response: {
 					204: deleteUser204ResponseSchema,
+					404: deleteUser404ResponseSchema,
 				},
 			},
 		},

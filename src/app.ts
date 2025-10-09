@@ -23,6 +23,13 @@ app.register(fastifySwagger, {
 				"Projeto desenvolvido para avaliação técnica da empresa Agenus",
 			version: "1.0.0",
 		},
+		tags: [
+			{
+				name: "Usuários",
+				description:
+					"Operações relacionadas à gestão de usuários, como criação, atualização, consulta e exclusão.",
+			},
+		],
 	},
 	transform: jsonSchemaTransform,
 });
