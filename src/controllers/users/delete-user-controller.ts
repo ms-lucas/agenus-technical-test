@@ -13,8 +13,8 @@ export class DeleteUserController {
 	) {
 		const { userId } = request.params;
 
-		const result = await deleteUserUseCase.execute({ userId });
+		await deleteUserUseCase.execute({ userId });
 
-		return reply.status(200).send(result);
+		return reply.status(204).send();
 	}
 }
