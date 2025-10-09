@@ -3,6 +3,7 @@ import {
 	hasZodFastifySchemaValidationErrors,
 	isResponseSerializationError,
 } from "fastify-type-provider-zod";
+import { AppError } from "./app-error";
 import { env } from "./env";
 
 export function errorHandler(
@@ -20,6 +21,12 @@ export function errorHandler(
 		return reply.status(400).send({
 			message: "Response doesn't match the schema.",
 			errors: error.cause.issues,
+		});
+	}
+
+	if (error instanceof AppError) {
+		return reply.status(error.statusCode).send({
+			message: error.message,
 		});
 	}
 
