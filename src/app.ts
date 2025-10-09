@@ -29,6 +29,11 @@ app.register(fastifySwagger, {
 				description:
 					"Operações relacionadas à gestão de usuários, como criação, atualização, consulta e exclusão.",
 			},
+			{
+				name: "Tarefas",
+				description:
+					"Operações relacionadas à criação, atualização, listagem e exclusão de tarefas associadas aos usuários.",
+			},
 		],
 	},
 	transform: jsonSchemaTransform,
