@@ -1,34 +1,34 @@
 import type { FastifyInstance } from "fastify";
-import { CreateUserController } from "../controllers/create-user-controller";
-import { DeleteUserController } from "../controllers/delete-user-controller";
-import { GetUserDetailsController } from "../controllers/get-user-details-controller";
+import { CreateUserController } from "../controllers/users/create-user-controller";
+import { DeleteUserController } from "../controllers/users/delete-user-controller";
+import { GetUserDetailsController } from "../controllers/users/get-user-details-controller";
 import {
 	createUser201ResponseSchema,
 	createUser409ResponseSchema,
 	createUserBodySchema,
-} from "../controllers/schemas/create-user-schema";
+} from "../controllers/users/schemas/create-user-schema";
 import {
 	deleteUser204ResponseSchema,
 	deleteUser404ResponseSchema,
 	deleteUserParamsSchema,
-} from "../controllers/schemas/delete-user-schema";
+} from "../controllers/users/schemas/delete-user-schema";
 import {
 	getUserDetails200ResponseSchema,
 	getUserDetails404ResponseSchema,
 	getUserDetailsParamsSchema,
-} from "../controllers/schemas/get-user-details-schema";
+} from "../controllers/users/schemas/get-user-details-schema";
 import {
 	searchUsers200ResponseSchema,
 	searchUsersQuerySchema,
-} from "../controllers/schemas/search-users-schema";
+} from "../controllers/users/schemas/search-users-schema";
 import {
 	updateUser200ResponseSchema,
 	updateUser404ResponseSchema,
 	updateUserBodySchema,
 	updateUserParamsSchema,
-} from "../controllers/schemas/update-user-schema";
-import { SearchUsersController } from "../controllers/search-users-controller";
-import { UpdateUserController } from "../controllers/update-user-controller";
+} from "../controllers/users/schemas/update-user-schema";
+import { SearchUsersController } from "../controllers/users/search-users-controller";
+import { UpdateUserController } from "../controllers/users/update-user-controller";
 
 const searchUsersController = new SearchUsersController();
 const getUserDetailsController = new GetUserDetailsController();

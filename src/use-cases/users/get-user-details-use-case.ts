@@ -1,6 +1,6 @@
 import type { User } from "@prisma/client";
-import { AppError } from "../app-error";
-import type { UsersRepository } from "../database/repositories/users-repository";
+import { AppError } from "../../app-error";
+import type { UsersRepository } from "../../database/repositories/users-repository";
 
 interface GetUserDetailsUseCaseRequest {
 	userId: string;

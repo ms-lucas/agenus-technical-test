@@ -1,5 +1,5 @@
 import type { User } from "@prisma/client";
-import type { UsersRepository } from "../database/repositories/users-repository";
+import type { UsersRepository } from "../../database/repositories/users-repository";
 
 interface SearchUsersUseCaseRequest {
 	search?: string;

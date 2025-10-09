@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { PrismaUsersRepository } from "../database/prisma/repositories/prisma-users-repository";
-import { GetUserDetailsUseCase } from "../use-cases/get-user-details-use-case";
+import { PrismaUsersRepository } from "../../database/prisma/repositories/prisma-users-repository";
+import { GetUserDetailsUseCase } from "../../use-cases/users/get-user-details-use-case";
 import type { GetUserDetailsSchema } from "./schemas/get-user-details-schema";
 
 const prismaUsersRepository = new PrismaUsersRepository();

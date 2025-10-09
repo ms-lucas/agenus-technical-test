@@ -1,6 +1,6 @@
-import { AppError } from "../app-error";
-import { prismaClient } from "../database/prisma";
-import type { UsersRepository } from "../database/repositories/users-repository";
+import { AppError } from "../../app-error";
+import { prismaClient } from "../../database/prisma";
+import type { UsersRepository } from "../../database/repositories/users-repository";
 
 interface CreateUserUseCaseRequest {
 	name: string;

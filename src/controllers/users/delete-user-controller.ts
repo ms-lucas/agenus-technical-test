@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { PrismaUsersRepository } from "../database/prisma/repositories/prisma-users-repository";
-import { DeleteUserUseCase } from "../use-cases/detele-user-use-case";
+import { PrismaUsersRepository } from "../../database/prisma/repositories/prisma-users-repository";
+import { DeleteUserUseCase } from "../../use-cases/users/detele-user-use-case";
 import type { DeleteUserSchema } from "./schemas/delete-user-schema";
 
 const prismaUsersRepository = new PrismaUsersRepository();
