@@ -6,6 +6,7 @@ export interface TasksRepository {
 		page?: number,
 		limit?: number,
 	): Promise<Array<Task> | null>;
+	findById(taskId: string): Promise<Task | null>;
 	create(data: {
 		title: string;
 		description: string;

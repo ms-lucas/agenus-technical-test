@@ -1,10 +1,16 @@
 import type { FastifyInstance } from "fastify";
 import { CreateTaskController } from "../controllers/tasks/create-task-controller";
+import { GetTaskDetailsController } from "../controllers/tasks/get-task-details-controller";
 import {
 	createTask201Response,
 	createTask404Response,
 	createTaskBodySchema,
 } from "../controllers/tasks/schemas/create-task-schema";
+import {
+	getTaskDetails200ResponseSchema,
+	getTaskDetails404ResponseSchema,
+	getTaskDetailsParamsSchema,
+} from "../controllers/tasks/schemas/get-task-details-schema";
 import {
 	searchTasks200ResponseSchema,
 	searchTasksQuerySchema,
@@ -12,6 +18,7 @@ import {
 import { SearchTasksController } from "../controllers/tasks/search-tasks-controller";
 
 const searchTaksController = new SearchTasksController();
+const getTaskDetailsController = new GetTaskDetailsController();
 const createTaskController = new CreateTaskController();
 
 export async function tasksRoutes(app: FastifyInstance) {
@@ -30,6 +37,24 @@ export async function tasksRoutes(app: FastifyInstance) {
 		},
 		searchTaksController.handle,
 	);
+
+	app.get(
+		"/:taskId",
+		{
+			schema: {
+				tags: ["Tarefas"],
+				description:
+					"Retorna os detalhes de um tarefa específicao pelo seu ID.",
+				params: getTaskDetailsParamsSchema,
+				response: {
+					200: getTaskDetails200ResponseSchema,
+					404: getTaskDetails404ResponseSchema,
+				},
+			},
+		},
+		getTaskDetailsController.handle,
+	);
+
 	app.post(
 		"",
 		{

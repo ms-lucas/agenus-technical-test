@@ -25,6 +25,16 @@ export class PrismaTasksRepository implements TasksRepository {
 		return tasks;
 	}
 
+	async findById(taskId: string): Promise<Task | null> {
+		const task = await prismaClient.task.findUnique({
+			where: {
+				id: taskId,
+			},
+		});
+
+		return task;
+	}
+
 	async create({
 		title,
 		description,
