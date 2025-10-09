@@ -1,7 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUsersRepository } from "../database/prisma/repositories/prisma-users-repository";
 import { CreateUserUseCase } from "../use-cases/create-user-use-case";
-import { ResourceAlreadyExistsError } from "../use-cases/errors/resource-already-exists-error";
 import type { CreateUserSchema } from "./schemas/create-user-schema";
 
 const prismaUsersRepository = new PrismaUsersRepository();
@@ -12,20 +11,12 @@ export class CreateUserController {
 		request: FastifyRequest<CreateUserSchema>,
 		reply: FastifyReply<CreateUserSchema>,
 	) {
-		try {
-			const { name, email } = request.body;
+		const { name, email } = request.body;
 
-			const { userId } = await createUserUseCase.exeute({ name, email });
+		const { userId } = await createUserUseCase.exeute({ name, email });
 
-			return reply.status(201).send({
-				userId,
-			});
-		} catch (error) {
-			if (error instanceof ResourceAlreadyExistsError) {
-				return reply.status(409).send({
-					message: error.message,
-				});
-			}
-		}
+		return reply.status(201).send({
+			userId,
+		});
 	}
 }

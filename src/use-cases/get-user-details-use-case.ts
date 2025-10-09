@@ -1,6 +1,6 @@
 import type { User } from "@prisma/client";
+import { AppError } from "../app-error";
 import type { UsersRepository } from "../database/repositories/users-repository";
-import { ResourceNotFoundError } from "./errors/resource-not-found";
 
 interface GetUserDetailsUseCaseRequest {
 	userId: string;
@@ -19,8 +19,9 @@ export class GetUserDetailsUseCase {
 		const user = await this.usersRepository.findById(userId);
 
 		if (!user) {
-			throw new ResourceNotFoundError(
+			throw new AppError(
 				`A user with id ${userId} does not exist. Please provide a valid user id.`,
+				404,
 			);
 		}
 

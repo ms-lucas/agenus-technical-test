@@ -7,6 +7,7 @@ import {
 	validatorCompiler,
 	type ZodTypeProvider,
 } from "fastify-type-provider-zod";
+import { errorHandler } from "./error-hanlder";
 import { routes } from "./routes";
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -32,5 +33,7 @@ app.register(scalarFastifyApiReference, {
 		hiddenClients: true,
 	},
 });
+
+app.setErrorHandler(errorHandler);
 
 app.register(routes);

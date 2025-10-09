@@ -1,6 +1,6 @@
+import { AppError } from "../app-error";
 import { prismaClient } from "../database/prisma";
 import type { UsersRepository } from "../database/repositories/users-repository";
-import { ResourceNotFoundError } from "./errors/resource-not-found";
 
 type UpdateUserUseCaseRequest = {
 	userId: string;
@@ -28,8 +28,9 @@ export class UpdateUserUseCase {
 		});
 
 		if (!user) {
-			throw new ResourceNotFoundError(
+			throw new AppError(
 				`A user with id ${userId} does not exist. Please provide a valid user id.`,
+				404,
 			);
 		}
 

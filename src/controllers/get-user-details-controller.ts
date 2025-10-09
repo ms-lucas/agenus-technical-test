@@ -1,6 +1,5 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUsersRepository } from "../database/prisma/repositories/prisma-users-repository";
-import { ResourceNotFoundError } from "../use-cases/errors/resource-not-found";
 import { GetUserDetailsUseCase } from "../use-cases/get-user-details-use-case";
 import type { GetUserDetailsSchema } from "./schemas/get-user-details-schema";
 
@@ -12,18 +11,10 @@ export class GetUserDetailsController {
 		request: FastifyRequest<GetUserDetailsSchema>,
 		reply: FastifyReply<GetUserDetailsSchema>,
 	) {
-		try {
-			const { userId } = request.params;
+		const { userId } = request.params;
 
-			const result = await getUserDetailsUseCase.execute({ userId });
+		const result = await getUserDetailsUseCase.execute({ userId });
 
-			return reply.status(200).send(result);
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				return reply.status(404).send({
-					message: error.message,
-				});
-			}
-		}
+		return reply.status(200).send(result);
 	}
 }

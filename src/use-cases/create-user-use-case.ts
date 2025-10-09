@@ -1,6 +1,6 @@
+import { AppError } from "../app-error";
 import { prismaClient } from "../database/prisma";
 import type { UsersRepository } from "../database/repositories/users-repository";
-import { ResourceAlreadyExistsError } from "./errors/resource-already-exists-error";
 
 interface CreateUserUseCaseRequest {
 	name: string;
@@ -25,8 +25,9 @@ export class CreateUserUseCase {
 		});
 
 		if (userAlreadyExists) {
-			throw new ResourceAlreadyExistsError(
+			throw new AppError(
 				`A user with the email ${email} already exists. Please use a different email address.`,
+				409,
 			);
 		}
 

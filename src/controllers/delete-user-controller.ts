@@ -1,7 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUsersRepository } from "../database/prisma/repositories/prisma-users-repository";
 import { DeleteUserUseCase } from "../use-cases/detele-user-use-case";
-import { ResourceNotFoundError } from "../use-cases/errors/resource-not-found";
 import type { DeleteUserSchema } from "./schemas/delete-user-schema";
 
 const prismaUsersRepository = new PrismaUsersRepository();
@@ -12,18 +11,10 @@ export class DeleteUserController {
 		request: FastifyRequest<DeleteUserSchema>,
 		reply: FastifyReply<DeleteUserSchema>,
 	) {
-		try {
-			const { userId } = request.params;
+		const { userId } = request.params;
 
-			const result = await deleteUserUseCase.execute({ userId });
+		const result = await deleteUserUseCase.execute({ userId });
 
-			return reply.status(200).send(result);
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				return reply.status(404).send({
-					message: error.message,
-				});
-			}
-		}
+		return reply.status(200).send(result);
 	}
 }
