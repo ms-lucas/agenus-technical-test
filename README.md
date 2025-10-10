@@ -1,281 +1,161 @@
-## Teste Técnico – Estagiário Back-End (Node.js + TypeScript)
+# Teste Técnico - Agenus
 
-API REST para gestão de usuários e tarefas, construída com Fastify, TypeScript, Prisma e PostgreSQL, seguindo boas práticas de estrutura, validação e documentação automática (OpenAPI).
+API REST para gestão de usuários e tarefas desenvolvida com Node.js, TypeScript, Fastify e Prisma.
 
-### Sumário
+## 🚀 Tecnologias
 
-- **Stack**
-- **Estrutura do projeto**
-- **Pré‑requisitos**
-- **Configuração do ambiente (.env)**
-- **Banco de dados (PostgreSQL + Prisma)**
-- **Como rodar o projeto**
-- **Documentação da API (Swagger/Scalar)**
-- **Endpoints**
-  - Usuários
-  - Tarefas
-- **Erros e validação**
-- **Qualidade de código**
-- **Comandos úteis**
+- **Node.js** + **TypeScript**
+- **Fastify** (framework web)
+- **Prisma** (ORM)
+- **PostgreSQL** (banco de dados)
+- **Zod** (validação)
+- **Biome** (linting/formatação)
 
----
-
-### Stack
-
-- **Runtime**: Node.js + TypeScript
-- **Framework**: Fastify (com `fastify-type-provider-zod`)
-- **ORM**: Prisma
-- **Banco de Dados**: PostgreSQL
-- **Validação**: Zod
-- **OpenAPI/Docs**: `@fastify/swagger` + `@scalar/fastify-api-reference`
-
-### Estrutura do projeto
+## 📁 Estrutura do Projeto
 
 ```
 src/
-  app.ts                  # Instância do Fastify, plugins, OpenAPI e /docs
-  server.ts               # Bootstrap do servidor (PORT via .env)
-  routes/                 # Rotas agrupadas por domínio
-    index.ts              # Registro de rotas com prefixos /users e /tasks
-    users-routes.ts       # Rotas de usuários
-    tasks-routes.ts       # Rotas de tarefas
-  controllers/            # Camada HTTP (controllers e schemas Zod)
-  use-cases/              # Regras de negócio por domínio
-  entities/               # Entidades de domínio
-  database/
-    prisma/               # Client Prisma e repositórios Prisma
-    repositories/         # Interfaces de repositório
-  env/                    # Validação de variáveis de ambiente (Zod)
-  app-error.ts            # Erro de domínio
-  error-handler.ts        # Tratamento centralizado de erros
-
-prisma/
-  schema.prisma           # Modelos User e Task
-  migrations/             # Migrações geradas
-
-docker-compose.yml        # PostgreSQL local (opcional)
+├── app.ts                    # Configuração do Fastify
+├── server.ts                 # Inicialização do servidor
+├── routes/                   # Definição das rotas
+│   ├── index.ts             # Registro de rotas
+│   ├── users-routes.ts      # Rotas de usuários
+│   └── tasks-routes.ts      # Rotas de tarefas
+├── controllers/              # Controllers HTTP
+│   ├── users/               # Controllers de usuários
+│   └── tasks/               # Controllers de tarefas
+├── use-cases/               # Regras de negócio
+├── entities/                # Entidades de domínio
+├── database/                # Camada de dados
+└── env/                     # Validação de variáveis
 ```
 
-### Pré‑requisitos
+## ⚙️ Configuração
 
-- Node.js 18+ (recomendado 20+)
-- npm 9+ ou pnpm/yarn
-- PostgreSQL local/contêiner (há `docker-compose.yml`)
+### 1. Variáveis de Ambiente
 
-### Configuração do ambiente (.env)
+Crie um arquivo `.env` na raiz:
 
-Crie um arquivo `.env` na raiz com as variáveis abaixo. A aplicação valida tudo com Zod em `src/env`.
-
-```
+```env
 NODE_ENV=development
 PORT=3333
-DATABASE_URL=postgres://USUARIO:SENHA@HOST:PORTA/NOME_DB?schema=public
+DATABASE_URL=postgres://usuario:senha@localhost:5432/banco
 ```
 
-Se usar o `docker-compose.yml` fornecido, as credenciais padrão são:
-
-- usuário: `postgres`
-- senha: `root`
-- banco: `mydb`
-- porta: `5432`
-
-### Banco de dados (PostgreSQL + Prisma)
-
-1. Subir o banco via Docker (opcional):
+### 2. Instalação
 
 ```bash
-docker compose up -d
-```
-
-2. Instalar dependências e gerar o client Prisma:
-
-```bash
+# Instalar dependências
 npm install
-npx prisma generate
+
+# Gerar cliente Prisma
+npm run prisma:generate
+
+# Aplicar migrações
+npm run prisma:migrate:dev
 ```
 
-3. Aplicar migrações:
+### 3. Executar
 
 ```bash
-npx prisma migrate deploy   # para ambientes já com migrações
-# ou
-npx prisma migrate dev      # em desenvolvimento, cria/aplica migrações
-```
-
-Modelos (resumo):
-
-- `User { id uuid, name string, email string único, createdAt datetime }`
-- `Task { id uuid, userId uuid, title string, description string, status enum('pending'|'done'), createdAt datetime }`
-
-### Como rodar o projeto
-
-```bash
-# 1) .env configurado e DB acessível
-# 2) Dependências instaladas e prisma generate/migrate executados
-npm run dev
-# Servidor iniciará em http://localhost:3333
-```
-
-### Documentação da API
-
-- OpenAPI é exposto e servido pelo Scalar em: `http://localhost:3333/docs`
-- Todas as rotas possuem schemas Zod, gerando documentação e validação automática.
-
----
-
-### Endpoints
-
-Observações gerais:
-
-- Todas as respostas/entradas seguem os schemas Zod definidos nos controllers.
-- Paginação padrão: `page=1` e `limit=20` quando aplicável.
-
-#### Usuários
-
-- POST `/users` – Criar usuário
-
-  - Body:
-    ```json
-    { "name": "John Doe", "email": "johndoe@example.com" }
-    ```
-  - 201:
-    ```json
-    { "userId": "uuid" }
-    ```
-  - 409 (e-mail já existente): `{ "message": string }`
-
-- GET `/users` – Listar/Buscar usuários
-
-  - Query: `search?: string`, `page?: number`, `limit?: number`
-  - 200:
-    ```json
-    {
-      "total": 1,
-      "totalPages": 1,
-      "page": 1,
-      "limit": 20,
-      "hasNextPage": false,
-      "hasPreviousPage": false,
-      "data": [
-        {
-          "id": "uuid",
-          "name": "John Doe",
-          "email": "johndoe@example.com",
-          "createdAt": "ISO"
-        }
-      ]
-    }
-    ```
-
-- GET `/users/:userId` – Detalhar usuário
-
-  - Params: `userId: uuid`
-  - 200: usuário completo
-  - 404: `{ "message": string }`
-
-- PUT `/users/:userId` – Atualizar usuário
-
-  - Params: `userId: uuid`
-  - Body: `{ name: string, email: string }`
-  - 200: `{ "userId": "uuid" }`
-  - 404: `{ "message": string }`
-
-- DELETE `/users/:userId` – Remover usuário
-  - Params: `userId: uuid`
-  - 204: sem corpo
-  - 404: `{ "message": string }`
-
-#### Tarefas
-
-- POST `/tasks` – Criar tarefa
-
-  - Body:
-    ```json
-    {
-      "title": "Configurar ambiente",
-      "description": "Instalar dependências e configurar .env",
-      "status": "pending",
-      "userId": "uuid"
-    }
-    ```
-  - 201: `{ "taskId": "uuid" }`
-  - 404 (user inexistente): `{ "message": string }`
-
-- GET `/tasks` – Listar/Buscar tarefas
-
-  - Query: `search?: string`, `page?: number`, `limit?: number`
-  - 200: mesma estrutura de paginação de `/users`, com itens contendo `id`, `title`, `description`, `status`, `userId`, `createdAt`.
-
-- GET `/tasks/:taskId` – Detalhar tarefa
-
-  - Params: `taskId: uuid`
-  - 200: tarefa completa
-  - 404: `{ "message": string }`
-
-- PUT `/tasks/:taskId` – Atualizar tarefa
-
-  - Params: `taskId: uuid`
-  - Body:
-    ```json
-    {
-      "title": "Atualizar documentação",
-      "description": "Revisar endpoints no README",
-      "status": "done",
-      "userId": "uuid"
-    }
-    ```
-  - 200: `{ "taskId": "uuid" }`
-  - 404: `{ "message": string }`
-
-- DELETE `/tasks/:taskId` – Remover tarefa
-  - Params: `taskId: uuid`
-  - 204: sem corpo
-  - 404: `{ "message": string }`
-
----
-
-### Erros e validação
-
-- Entradas (body, params, query) e saídas são validadas por Zod.
-- Erros comuns:
-  - 400: schema inválido (request/response)
-  - 404: recurso não encontrado
-  - 409: conflito (e.g., e-mail já cadastrado)
-  - 500: erro interno
-
-### Qualidade de código
-
-- Configurado `@biomejs/biome` para lint/format (ver `biome.json`).
-- Tipagem estrita no `tsconfig.json` (`strict: true`).
-
-### Comandos úteis
-
-```bash
-# Subir Postgres local
-docker compose up -d
-
-# Gerar client Prisma
-npx prisma generate
-
-# Criar/aplicar migrações (dev)
-npx prisma migrate dev --name <nome>
-
-# Aplicar migrações (CI/Prod)
-npx prisma migrate deploy
-
-# Rodar em desenvolvimento
 npm run dev
 ```
 
-### Healthcheck
+Servidor disponível em: `http://localhost:3333`
+
+## 📚 Documentação
+
+A documentação interativa está disponível em: `http://localhost:3333/docs`
+
+## 🔗 Endpoints
+
+### Usuários
+
+| Método   | Endpoint         | Descrição                               |
+| -------- | ---------------- | --------------------------------------- |
+| `GET`    | `/users`         | Listar usuários (com busca e paginação) |
+| `GET`    | `/users/:userId` | Detalhar usuário                        |
+| `POST`   | `/users`         | Criar usuário                           |
+| `PUT`    | `/users/:userId` | Atualizar usuário                       |
+| `DELETE` | `/users/:userId` | Remover usuário                         |
+
+### Tarefas
+
+| Método   | Endpoint         | Descrição                              |
+| -------- | ---------------- | -------------------------------------- |
+| `GET`    | `/tasks`         | Listar tarefas (com busca e paginação) |
+| `GET`    | `/tasks/:taskId` | Detalhar tarefa                        |
+| `POST`   | `/tasks`         | Criar tarefa                           |
+| `PUT`    | `/tasks/:taskId` | Atualizar tarefa                       |
+| `DELETE` | `/tasks/:taskId` | Remover tarefa                         |
+
+## 📝 Exemplos
+
+### Criar Usuário
 
 ```bash
-curl http://localhost:3333/health
-# { "status": "ok" }
+curl -X POST http://localhost:3333/users \
+  -H "Content-Type: application/json" \
+  -d '{"name": "João Silva", "email": "joao@example.com"}'
 ```
 
----
+### Criar Tarefa
 
-### Licença
+```bash
+curl -X POST http://localhost:3333/tasks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Implementar API",
+    "description": "Desenvolver endpoints",
+    "status": "pending",
+    "userId": "uuid-do-usuario"
+  }'
+```
 
-Uso acadêmico/técnico para fins de avaliação.
+### Buscar Usuários
+
+```bash
+curl "http://localhost:3333/users?search=João&page=1&limit=10"
+```
+
+## 🗄️ Banco de Dados
+
+### Usuário
+
+- `id`: UUID (chave primária)
+- `name`: String
+- `email`: String (único)
+- `createdAt`: DateTime
+
+### Tarefa
+
+- `id`: UUID (chave primária)
+- `userId`: UUID (chave estrangeira)
+- `title`: String
+- `description`: String
+- `status`: "pending" | "done"
+- `createdAt`: DateTime
+
+## 🛠️ Comandos
+
+```bash
+# Desenvolvimento
+npm run dev                    # Iniciar servidor
+npm run prisma:studio         # Abrir Prisma Studio
+
+# Banco de dados
+npm run prisma:generate       # Gerar cliente Prisma
+npm run prisma:migrate:dev    # Aplicar migrações
+npm run prisma:migrate:deploy # Deploy de migrações
+
+# Qualidade
+npm run lint                  # Verificar código
+npm run format                # Formatar código
+```
+
+## 📋 Observações
+
+- Todas as validações são feitas com Zod
+- Paginação padrão: `page=1` e `limit=20`
+- Códigos de erro padronizados (400, 404, 409, 500)
+- Documentação automática com OpenAPI/Swagger
