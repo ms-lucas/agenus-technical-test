@@ -1,5 +1,6 @@
 import { AppError } from "../../app-error";
 import type { TasksRepository } from "../../database/repositories/tasks-repository";
+import type { UsersRepository } from "../../database/repositories/users-repository";
 
 type UpdateTaskUseCaseRequest = {
 	taskId: string;
@@ -16,12 +17,24 @@ type UpdateTaskUseCaseResponse = {
 };
 
 export class UpdateTaskUseCase {
-	constructor(private tasksRepository: TasksRepository) {}
+	constructor(
+		private tasksRepository: TasksRepository,
+		private usersRepository: UsersRepository,
+	) {}
 
 	async execute({
 		taskId,
 		data,
 	}: UpdateTaskUseCaseRequest): Promise<UpdateTaskUseCaseResponse> {
+		const userExists = await this.usersRepository.findById(data.userId);
+
+		if (!userExists) {
+			throw new AppError(
+				`A user with id ${data.userId} does not exist. Please provide a valid user id.`,
+				404,
+			);
+		}
+
 		const task = await this.tasksRepository.findById(taskId);
 
 		if (!task) {
