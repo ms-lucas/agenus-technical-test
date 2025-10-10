@@ -7,6 +7,12 @@ export const searchTasksQuerySchema = z.object({
 			"Texto usado para buscar tarefas pelo título ou descrição. Opcional.",
 		example: "Atualizar documentação do projeto",
 	}),
+	searchByStatus: z.enum(["pending", "done"]).optional().meta({
+		title: "Filtro por status",
+		description:
+			"Define o status das tarefas que devem ser retornadas. Pode ser 'pending' para tarefas pendentes ou 'done' para tarefas concluídas.",
+		example: "pending",
+	}),
 	page: z.coerce.number().min(1).default(1).meta({
 		title: "Número da página",
 		description: "Número da página atual na paginação. O valor mínimo é 1.",

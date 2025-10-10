@@ -43,7 +43,7 @@ export async function tasksRoutes(app: FastifyInstance) {
 			schema: {
 				tags: ["Tarefas"],
 				description:
-					"Busca tarefas cadastradas no sistema. Permite filtragem por título ou descrição, além de paginação e definição do número de resultados por página.",
+					"Busca tarefas cadastradas no sistema. Permite filtragem por título ou descrição e por status, além de paginação e definição do número de resultados por página.",
 				querystring: searchTasksQuerySchema,
 				response: {
 					200: searchTasks200ResponseSchema,

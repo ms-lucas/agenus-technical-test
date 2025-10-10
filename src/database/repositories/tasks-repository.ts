@@ -3,6 +3,7 @@ import type { Task } from "../../entities/task";
 export interface TasksRepository {
 	findMany(
 		search?: string,
+		searchByStatus?: "pending" | "done",
 		page?: number,
 		limit?: number,
 	): Promise<Array<Task> | null>;
@@ -23,5 +24,8 @@ export interface TasksRepository {
 		},
 	): Promise<{ taskId: string }>;
 	delete(taskId: string): Promise<void>;
-	count(search?: string): Promise<{ total: number }>;
+	count(
+		search?: string,
+		searchByStatus?: "pending" | "done",
+	): Promise<{ total: number }>;
 }

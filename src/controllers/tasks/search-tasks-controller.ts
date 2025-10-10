@@ -11,10 +11,11 @@ export class SearchTasksController {
 		request: FastifyRequest<SearchTasksSchema>,
 		reply: FastifyReply<SearchTasksSchema>,
 	) {
-		const { search, page, limit } = request.query;
+		const { search, searchByStatus, page, limit } = request.query;
 
 		const result = await searchTasksUseCase.execute({
 			search,
+			searchByStatus,
 			page,
 			limit,
 		});

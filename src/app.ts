@@ -1,3 +1,4 @@
+import { fastifyCors } from "@fastify/cors";
 import fastifySwagger from "@fastify/swagger";
 import scalarFastifyApiReference from "@scalar/fastify-api-reference";
 import { fastify } from "fastify";
@@ -14,6 +15,10 @@ export const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
+
+app.register(fastifyCors, {
+	origin: "*",
+});
 
 app.register(fastifySwagger, {
 	openapi: {
