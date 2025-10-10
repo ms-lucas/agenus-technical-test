@@ -18,13 +18,13 @@ export class CreateTaskController {
 	) {
 		const { title, description, status, userId } = request.body;
 
-		const { taskId } = await createTaskUseCase.execute({
+		const result = await createTaskUseCase.execute({
 			title,
 			description,
 			status,
 			userId,
 		});
 
-		return reply.status(201).send({ taskId });
+		return reply.status(201).send({ taskId: result.taskId });
 	}
 }

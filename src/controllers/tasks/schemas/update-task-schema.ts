@@ -1,24 +1,24 @@
 import { z } from "zod";
 
 export const updateTaskBodySchema = z.object({
-	title: z.string().min(1).max(255).meta({
+	title: z.string().min(1).max(255).optional().meta({
 		title: "Título da tarefa",
 		description:
 			"Novo título da tarefa. Deve ser uma string não vazia com até 255 caracteres.",
 		example: "Atualizar documentação do projeto",
 	}),
-	description: z.string().meta({
+	description: z.string().optional().meta({
 		title: "Descrição da tarefa",
 		description: "Detalhes ou observações adicionais sobre a tarefa.",
 		example: "Revisar e atualizar os endpoints listados no README.",
 	}),
-	status: z.enum(["pending", "done"]).meta({
+	status: z.enum(["pending", "done"]).optional().meta({
 		title: "Status da tarefa",
 		description:
 			"Estado atual da tarefa. Pode ser 'pending' (pendente) ou 'done' (concluída).",
 		example: "done",
 	}),
-	userId: z.uuid().meta({
+	userId: z.uuid().optional().meta({
 		title: "ID do usuário",
 		description: "UUID que identifica o usuário responsável pela tarefa.",
 		example: "b1b8f3b2-2e7b-4f6e-b0a3-6c9d9e7f18a3",

@@ -5,10 +5,10 @@ import type { UsersRepository } from "../../database/repositories/users-reposito
 type UpdateTaskUseCaseRequest = {
 	taskId: string;
 	data: {
-		title: string;
-		description: string;
-		status: "pending" | "done";
-		userId: string;
+		title?: string;
+		description?: string;
+		status?: "pending" | "done";
+		userId?: string;
 	};
 };
 
@@ -26,13 +26,17 @@ export class UpdateTaskUseCase {
 		taskId,
 		data,
 	}: UpdateTaskUseCaseRequest): Promise<UpdateTaskUseCaseResponse> {
-		const userExists = await this.usersRepository.findById(data.userId);
+		const { title, description, status, userId } = data;
 
-		if (!userExists) {
-			throw new AppError(
-				`A user with id ${data.userId} does not exist. Please provide a valid user id.`,
-				404,
-			);
+		if (userId) {
+			const userExists = await this.usersRepository.findById(userId);
+
+			if (!userExists) {
+				throw new AppError(
+					`A user with id ${data.userId} does not exist. Please provide a valid user id.`,
+					404,
+				);
+			}
 		}
 
 		const task = await this.tasksRepository.findById(taskId);
@@ -45,10 +49,10 @@ export class UpdateTaskUseCase {
 		}
 
 		const { taskId: id } = await this.tasksRepository.update(taskId, {
-			title: data.title,
-			description: data.description,
-			status: data.status,
-			userId: data.userId,
+			title: title ? title : task.title,
+			description: description ? description : task.description,
+			status: status ? status : task.status,
+			userId: userId ? userId : task.userId,
 		});
 
 		return { taskId: id };
