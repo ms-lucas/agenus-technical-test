@@ -4,8 +4,8 @@ import type { UsersRepository } from "../../database/repositories/users-reposito
 type UpdateUserUseCaseRequest = {
 	userId: string;
 	data: {
-		name: string;
-		email: string;
+		name?: string;
+		email?: string;
 	};
 };
 
@@ -20,6 +20,12 @@ export class UpdateUserUseCase {
 		userId,
 		data,
 	}: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
+		const { name, email } = data;
+
+		if (!name && !email) {
+			throw new AppError("No valid attribute provided for update.", 400);
+		}
+
 		const user = await this.usersRepository.findById(userId);
 
 		if (!user) {
@@ -29,9 +35,20 @@ export class UpdateUserUseCase {
 			);
 		}
 
+		if (email) {
+			const userAlreadyExists = await this.usersRepository.findByEmail(email);
+
+			if (userAlreadyExists && userAlreadyExists.id !== userId) {
+				throw new AppError(
+					`A user with the email ${email} already exists. Please use a different email address.`,
+					409,
+				);
+			}
+		}
+
 		const { userId: id } = await this.usersRepository.update(userId, {
-			name: data.name,
-			email: data.email,
+			name: name ? name : user.name,
+			email: email ? email : user.email,
 		});
 
 		return { userId: id };

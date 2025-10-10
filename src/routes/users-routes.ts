@@ -24,6 +24,7 @@ import {
 import {
 	updateUser200ResponseSchema,
 	updateUser404ResponseSchema,
+	updateUser409ResponseSchema,
 	updateUserBodySchema,
 	updateUserParamsSchema,
 } from "../controllers/users/schemas/update-user-schema";
@@ -99,6 +100,7 @@ export async function usersRoutes(app: FastifyInstance) {
 				response: {
 					200: updateUser200ResponseSchema,
 					404: updateUser404ResponseSchema,
+					409: updateUser409ResponseSchema,
 				},
 			},
 		},
