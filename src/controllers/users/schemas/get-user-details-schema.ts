@@ -45,4 +45,8 @@ export const getUserDetails404ResponseSchema = z.object({
 
 export type GetUserDetailsSchema = {
 	Params: z.infer<typeof getUserDetailsParamsSchema>;
+	Response: {
+		200: z.infer<typeof getUserDetails200ResponseSchema>;
+		404: z.infer<typeof getUserDetails404ResponseSchema>;
+	};
 };

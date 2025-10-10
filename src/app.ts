@@ -7,7 +7,7 @@ import {
 	validatorCompiler,
 	type ZodTypeProvider,
 } from "fastify-type-provider-zod";
-import { errorHandler } from "./error-hanlder";
+import { errorHandler } from "./error-handler";
 import { routes } from "./routes";
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>();

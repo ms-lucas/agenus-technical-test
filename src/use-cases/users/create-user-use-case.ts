@@ -1,5 +1,4 @@
 import { AppError } from "../../app-error";
-import { prismaClient } from "../../database/prisma";
 import type { UsersRepository } from "../../database/repositories/users-repository";
 
 interface CreateUserUseCaseRequest {
@@ -18,11 +17,7 @@ export class CreateUserUseCase {
 		name,
 		email,
 	}: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
-		const userAlreadyExists = await prismaClient.user.findUnique({
-			where: {
-				email,
-			},
-		});
+		const userAlreadyExists = await this.usersRepository.findByEmail(email);
 
 		if (userAlreadyExists) {
 			throw new AppError(

@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaTasksRepository } from "../../database/prisma/repositories/prisma-tasks-repository";
 import { SearchTasksUseCase } from "../../use-cases/tasks/search-tasks-use-case";
-import type { SearchTasksSchema } from "./schemas/search-task-controller";
+import type { SearchTasksSchema } from "./schemas/search-tasks-schema";
 
 const prismaTasksRepository = new PrismaTasksRepository();
 const searchTasksUseCase = new SearchTasksUseCase(prismaTasksRepository);

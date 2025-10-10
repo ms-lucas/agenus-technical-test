@@ -1,5 +1,4 @@
 import { AppError } from "../../app-error";
-import { prismaClient } from "../../database/prisma";
 import type { UsersRepository } from "../../database/repositories/users-repository";
 
 interface DeleteUserUseCaseRquest {
@@ -10,11 +9,7 @@ export class DeleteUserUseCase {
 	constructor(private usersRepository: UsersRepository) {}
 
 	async execute({ userId }: DeleteUserUseCaseRquest): Promise<void> {
-		const user = await prismaClient.user.findUnique({
-			where: {
-				id: userId,
-			},
-		});
+		const user = await this.usersRepository.findById(userId);
 
 		if (!user) {
 			throw new AppError(

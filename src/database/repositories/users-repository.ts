@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { User } from "../../entities/user";
 
 export interface UsersRepository {
 	findMany(
@@ -7,6 +7,7 @@ export interface UsersRepository {
 		limit?: number,
 	): Promise<Array<User> | null>;
 	findById(userId: string): Promise<User | null>;
+	findByEmail(email: string): Promise<User | null>;
 	create(data: { name: string; email: string }): Promise<{ userId: string }>;
 	update(
 		userId: string,

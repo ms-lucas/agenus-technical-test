@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { CreateTaskController } from "../controllers/tasks/create-task-controller";
-import { DeleteTaskController } from "../controllers/tasks/delete-user-controller";
+import { DeleteTaskController } from "../controllers/tasks/delete-task-controller";
 import { GetTaskDetailsController } from "../controllers/tasks/get-task-details-controller";
 import {
 	createTask201Response,
@@ -20,7 +20,7 @@ import {
 import {
 	searchTasks200ResponseSchema,
 	searchTasksQuerySchema,
-} from "../controllers/tasks/schemas/search-task-controller";
+} from "../controllers/tasks/schemas/search-tasks-schema";
 import {
 	updateTask200ResponseSchema,
 	updateTask404ResponseSchema,

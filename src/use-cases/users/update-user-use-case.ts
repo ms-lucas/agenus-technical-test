@@ -1,5 +1,4 @@
 import { AppError } from "../../app-error";
-import { prismaClient } from "../../database/prisma";
 import type { UsersRepository } from "../../database/repositories/users-repository";
 
 type UpdateUserUseCaseRequest = {
@@ -21,11 +20,7 @@ export class UpdateUserUseCase {
 		userId,
 		data,
 	}: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
-		const user = await prismaClient.user.findUnique({
-			where: {
-				id: userId,
-			},
-		});
+		const user = await this.usersRepository.findById(userId);
 
 		if (!user) {
 			throw new AppError(

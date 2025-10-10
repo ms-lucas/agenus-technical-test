@@ -16,7 +16,6 @@ export class GetTaskDetailsUseCase {
 	async execute({
 		taskId,
 	}: GetTaskDetailsUseCaseRequest): Promise<GetTaskDetailsUseCaseResponse> {
-		console.log(taskId);
 		const task = await this.tasksRepository.findById(taskId);
 
 		if (!task) {
