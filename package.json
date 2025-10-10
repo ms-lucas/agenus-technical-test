@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"engines": {
+		"node": ">= 20"
+	},
 	"scripts": {
 		"dev": "tsx watch --env-file .env src/server.ts",
 		"prisma:generate": "prisma generate",
@@ -10,7 +13,9 @@
 		"prisma:migrate:deploy": "prisma migrate deploy",
 		"prisma:studio": "prisma studio",
 		"lint": "biome check .",
-		"format": "biome format ."
+		"format": "biome format .",
+		"build": "tsup src",
+		"start": "node --env-file .env dist/server.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -29,6 +34,7 @@
 		"@biomejs/biome": "2.2.5",
 		"@types/node": "^24.7.0",
 		"prisma": "^6.16.3",
+		"tsup": "^8.5.0",
 		"tsx": "^4.20.6"
 	}
 }
