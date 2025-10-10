@@ -1,11 +1,17 @@
 import type { FastifyInstance } from "fastify";
 import { CreateTaskController } from "../controllers/tasks/create-task-controller";
+import { DeleteTaskController } from "../controllers/tasks/delete-user-controller";
 import { GetTaskDetailsController } from "../controllers/tasks/get-task-details-controller";
 import {
 	createTask201Response,
 	createTask404Response,
 	createTaskBodySchema,
 } from "../controllers/tasks/schemas/create-task-schema";
+import {
+	deleteTask204ResponseSchema,
+	deleteTask404ResponseSchema,
+	deleteTaskParamsSchema,
+} from "../controllers/tasks/schemas/delete-task-schema";
 import {
 	getTaskDetails200ResponseSchema,
 	getTaskDetails404ResponseSchema,
@@ -28,6 +34,7 @@ const searchTaksController = new SearchTasksController();
 const getTaskDetailsController = new GetTaskDetailsController();
 const createTaskController = new CreateTaskController();
 const updateTaskController = new UpdateTaskController();
+const deleteTaskController = new DeleteTaskController();
 
 export async function tasksRoutes(app: FastifyInstance) {
 	app.get(
@@ -96,5 +103,21 @@ export async function tasksRoutes(app: FastifyInstance) {
 			},
 		},
 		updateTaskController.handle,
+	);
+
+	app.delete(
+		"/:taskId",
+		{
+			schema: {
+				tags: ["Tarefas"],
+				description: "Remove uma tarefa do sistema pelo seu ID.",
+				params: deleteTaskParamsSchema,
+				response: {
+					204: deleteTask204ResponseSchema,
+					404: deleteTask404ResponseSchema,
+				},
+			},
+		},
+		deleteTaskController.handle,
 	);
 }

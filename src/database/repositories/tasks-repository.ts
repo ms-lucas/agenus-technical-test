@@ -22,5 +22,6 @@ export interface TasksRepository {
 			userId: string;
 		},
 	): Promise<{ taskId: string }>;
+	delete(taskId: string): Promise<void>;
 	count(search?: string): Promise<{ total: number }>;
 }
