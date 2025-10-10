@@ -13,5 +13,14 @@ export interface TasksRepository {
 		status: "pending" | "done";
 		userId: string;
 	}): Promise<{ taskId: string }>;
+	update(
+		taskId: string,
+		data: {
+			title: string;
+			description: string;
+			status: "pending" | "done";
+			userId: string;
+		},
+	): Promise<{ taskId: string }>;
 	count(search?: string): Promise<{ total: number }>;
 }

@@ -15,11 +15,19 @@ import {
 	searchTasks200ResponseSchema,
 	searchTasksQuerySchema,
 } from "../controllers/tasks/schemas/search-task-controller";
+import {
+	updateTask200ResponseSchema,
+	updateTask404ResponseSchema,
+	updateTaskBodySchema,
+	updateTaskParamsSchema,
+} from "../controllers/tasks/schemas/update-task-schema";
 import { SearchTasksController } from "../controllers/tasks/search-tasks-controller";
+import { UpdateTaskController } from "../controllers/tasks/update-task-controller";
 
 const searchTaksController = new SearchTasksController();
 const getTaskDetailsController = new GetTaskDetailsController();
 const createTaskController = new CreateTaskController();
+const updateTaskController = new UpdateTaskController();
 
 export async function tasksRoutes(app: FastifyInstance) {
 	app.get(
@@ -70,5 +78,23 @@ export async function tasksRoutes(app: FastifyInstance) {
 			},
 		},
 		createTaskController.handle,
+	);
+
+	app.put(
+		"/:taskId",
+		{
+			schema: {
+				tags: ["Tarefas"],
+				description:
+					"Atualiza os dados de uma tarefa existente, como título, descrição, status e usuário responsável, pelo seu ID.",
+				body: updateTaskBodySchema,
+				params: updateTaskParamsSchema,
+				response: {
+					200: updateTask200ResponseSchema,
+					404: updateTask404ResponseSchema,
+				},
+			},
+		},
+		updateTaskController.handle,
 	);
 }

@@ -60,6 +60,30 @@ export class PrismaTasksRepository implements TasksRepository {
 		};
 	}
 
+	async update(
+		taskId: string,
+		data: {
+			title: string;
+			description: string;
+			status: "pending" | "done";
+			userId: string;
+		},
+	): Promise<{ taskId: string }> {
+		const { id } = await prismaClient.task.update({
+			data: {
+				title: data.title,
+				description: data.description,
+				status: data.status,
+				userId: data.userId,
+			},
+			where: {
+				id: taskId,
+			},
+		});
+
+		return { taskId: id };
+	}
+
 	async count(search?: string): Promise<{ total: number }> {
 		const total = await prismaClient.task.count({
 			where: search
