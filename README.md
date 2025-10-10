@@ -1,4 +1,4 @@
-# Teste Técnico - Agenus
+# Teste Técnico para Vaga de Estágio Backend | Agenus
 
 API REST para gestão de usuários e tarefas desenvolvida com Node.js, TypeScript, Fastify e Prisma.
 
@@ -15,13 +15,13 @@ API REST para gestão de usuários e tarefas desenvolvida com Node.js, TypeScrip
 
 ```
 src/
-├── app.ts                    # Configuração do Fastify
-├── server.ts                 # Inicialização do servidor
-├── routes/                   # Definição das rotas
+├── app.ts                   # Configuração do Fastify
+├── server.ts                # Inicialização do servidor
+├── routes/                  # Definição das rotas
 │   ├── index.ts             # Registro de rotas
 │   ├── users-routes.ts      # Rotas de usuários
 │   └── tasks-routes.ts      # Rotas de tarefas
-├── controllers/              # Controllers HTTP
+├── controllers/             # Controllers HTTP
 │   ├── users/               # Controllers de usuários
 │   └── tasks/               # Controllers de tarefas
 ├── use-cases/               # Regras de negócio
@@ -140,7 +140,7 @@ curl "http://localhost:3333/users?search=João&page=1&limit=10"
 
 ```bash
 # Desenvolvimento
-npm run dev                    # Iniciar servidor
+npm run dev                   # Iniciar servidor
 npm run prisma:studio         # Abrir Prisma Studio
 
 # Banco de dados
